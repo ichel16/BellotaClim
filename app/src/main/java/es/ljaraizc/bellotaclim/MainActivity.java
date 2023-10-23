@@ -20,6 +20,8 @@ public class MainActivity extends AppCompatActivity {
 
     Connection conn;
 
+    //Creo cualquier cosa.
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
