@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "474188600543",
+    "firebase_url": "https://rocodromobellotaclimb-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "rocodromobellotaclimb",
+    "storage_bucket": "rocodromobellotaclimb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:474188600543:android:90e9269465548370e8456a",
+        "android_client_info": {
+          "package_name": "es.ljaraizc.bellotaclim"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTaKOx2grz2HflbmrXAz4qcXuhPMTTFS8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
