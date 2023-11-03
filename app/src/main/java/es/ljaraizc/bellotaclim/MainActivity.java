@@ -18,24 +18,39 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button A1_b_iniciar;
+    private Button A1_b_iniciar, A1_b_registrarse;
+    EditText edNombre, etPass;
     private TextView A1_tv_texto;
 
+    List<String> listaHorasOcupadas = new ArrayList<>();
+    List<String> listaPruebas = new ArrayList<>();
+
+    TextView helloWorld, textViewPrueba;
     private FirebaseAuth mAuth;
+
 
     Connection conn;
 
@@ -46,54 +61,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map<String, Object> user = new HashMap<>();
-        user.put("apellido", "test1 test2");
-        user.put("edad", 22);
-        user.put("email", "test@dominio.es");
-        user.put("nombre", "nombreTest");
-        user.put("pass", "pass");
-        user.put("rol", "user");
-        user.put("telefono", "654654123");
-
-        //Asisgnas el nombre a un documento.
-        db.collection("Usuarios").document("TeVoyABorrar").set(user)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-
-                            }
-                        })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-
-                                    }
-                                });
-
-        //Se crea automáticamente el nombre al documento.
-        db.collection("Usuarios")
-                .add(user)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.println(Log.ERROR,"ALGO",""+e);
-                    }
-                })
-        ;*/
 
         mAuth = FirebaseAuth.getInstance();
 
-        EditText edNombre = findViewById(R.id.edNombre);
-        EditText etPass = findViewById(R.id.etPass);
+        edNombre = findViewById(R.id.edNombre);
+        etPass = findViewById(R.id.etPass);
 
+        helloWorld = findViewById(R.id.A1_tv_texto);
 
         A1_b_iniciar = findViewById(R.id.A1_b_iniciar);
 
@@ -101,16 +76,92 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String email = edNombre.getText().toString();
-                String password = etPass.getText().toString();
+                String email="", password="";
+
+                email = edNombre.getText().toString();
+                password = etPass.getText().toString();
+
+                if (validarCampos(email, password)){
+                    iniciarSesion(email, password);
+                }
+
+
 
                 //leo@dominio.es -> leoleo
                 //registrar(email, password);
-                iniciarSesion(email, password);
+
 
             }
         });
 
+        A1_b_registrarse = findViewById(R.id.A1_b_registrarse);
+        A1_b_registrarse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirActividadCrearCuenta();
+            }
+        });
+
+    }
+
+    public Boolean validarCampos(String email, String password){
+
+        boolean camposValidos = true;
+
+        if (email.isEmpty()){
+            camposValidos = false;
+            edNombre.setError("Este campo no puede estar vacío.");
+        }
+        if (password.isEmpty()) {
+            camposValidos = false;
+            etPass.setError("Este campo no puede estar vacío.");
+        }
+
+        return camposValidos;
+    }
+
+    public Task<QuerySnapshot> queryCollection(String collectionPath) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        CollectionReference collectionRef = db.collection(collectionPath);
+
+        // Crea un TaskCompletionSource para controlar la promesa
+        final TaskCompletionSource<QuerySnapshot> taskCompletionSource = new TaskCompletionSource<>();
+
+        // Realiza la consulta
+        collectionRef.get()
+                .addOnSuccessListener(querySnapshot -> {
+                    // La consulta fue exitosa, completa la promesa con el resultado
+                    taskCompletionSource.setResult(querySnapshot);
+                })
+                .addOnFailureListener(e -> {
+                    // La consulta falló, completa la promesa con un error
+                    taskCompletionSource.setException(e);
+                });
+
+        // Retorna la promesa
+        return taskCompletionSource.getTask();
+    }
+    public void consultaSimple(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference dr = db.collection("UsoSalas").document();
+
+        db.collection("UsoSalas")
+                .get()
+                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                                    for (QueryDocumentSnapshot document : queryDocumentSnapshots){
+                                        Log.d("TAG",document.getId()+" -> "+document.getData());
+                                        listaPruebas.add((document.getData().toString()));
+                                }
+
+                            }
+                        });
+
+        textViewPrueba.setText(listaPruebas.toString()+"");
 
     }
 
@@ -126,7 +177,10 @@ public class MainActivity extends AppCompatActivity {
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
 
-                            abrirActividadMenuPrincipal();
+                            String id = user.getUid();
+
+                            abrirActividadMenuPrincipal(id);
+
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -139,27 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void registrar(String email, String password){
 
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                            updateUI(null);
-                        }
-                    }
-                });
-
-    }
 
 
 
@@ -211,8 +245,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void abrirActividadMenuPrincipal(){
+    public void abrirActividadMenuPrincipal(String id){
         Intent intent = new Intent(this, MenuPrincipalActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
+    }
+
+    public void abrirActividadCrearCuenta(){
+        Intent intent = new Intent(this, CrearCuentaActivity.class);
         startActivity(intent);
     }
 

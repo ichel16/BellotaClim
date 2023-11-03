@@ -3,9 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:title="Perfil"
-        android:icon="@drawable/ic_android_black_24dp"
+        android:icon="@drawable/baseline_person_24"
         android:id="@+id/menu_perfil"/>
+
+    <item android:title="Material"
+        android:icon="@drawable/emoji_material"
+        android:id="@+id/menu_material"/>
+
     <item android:title="Bulder"
-        android:icon="@drawable/baseline_airplanemode_active_24"
+        android:icon="@drawable/emoji_bulder"
         android:id="@+id/menu_bulder"/>
+
+    <item android:title="Cuerda"
+        android:icon="@drawable/emoji_cuerda"
+        android:id="@+id/menu_cuerda"/>
+
 </menu>

@@ -7,12 +7,14 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class MenuPrincipalActivity extends AppCompatActivity {
 
+    String id;
     PerfilFragment perfilFragment = new PerfilFragment();
     //MaterialFragment materialFragment = new MaterialFragment();
     BulderFragment boulderFragment = new BulderFragment();
@@ -22,6 +24,11 @@ public class MenuPrincipalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_principal);
+
+        //Recibimos el id del usuario.
+        Bundle bundle = getIntent().getExtras();
+        id = bundle.getString("id");
+        //Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
 
         seleccionarFragment(perfilFragment);
 
@@ -50,7 +57,14 @@ public class MenuPrincipalActivity extends AppCompatActivity {
 
 
     public void seleccionarFragment(Fragment fragment){
+
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        fragment.setArguments(bundle);
+
         transaction.replace(R.id.frame_para_fragment, fragment);
         transaction.addToBackStack(null);
         transaction.commit();

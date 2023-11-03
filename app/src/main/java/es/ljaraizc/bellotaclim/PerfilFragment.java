@@ -2,11 +2,26 @@ package es.ljaraizc.bellotaclim;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -14,6 +29,8 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class PerfilFragment extends Fragment {
+
+    EditText fpNombre, fpApellidos, fpEmail, fpTelefono, fpNacimiento;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -59,6 +76,49 @@ public class PerfilFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_perfil, container, false);
+        View view = inflater.inflate(R.layout.fragment_perfil, container, false);
+
+        String id = this.getArguments().getString("id");
+
+        fpNombre = view.findViewById(R.id.fpNombre);
+        fpApellidos = view.findViewById(R.id.fpApellidos);
+        fpEmail = view.findViewById(R.id.fpEmail);
+        fpTelefono = view.findViewById(R.id.fpTelefono);
+        fpNacimiento = view.findViewById(R.id.fpNacimiento);
+
+
+        consultarDatosUsuario(id, view);
+
+        return view;
+    }
+
+    public void consultarDatosUsuario(String id, View view){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        DocumentReference documentReference = db.collection("Usuarios").document(id);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        fpNombre.setText(document.getString("nombre"));
+                        fpApellidos.setText(document.getString("apellido"));
+                        fpEmail.setText(document.getString("email"));
+                        fpTelefono.setText(document.getString("telefono"));
+                        fpNacimiento.setText(document.getString("año nacimiento"));
+
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("TAG", "No such document");
+                    }
+                }else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+
     }
 }

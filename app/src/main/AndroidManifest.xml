@@ -16,6 +16,9 @@
         android:theme="@style/Theme.BellotaClim"
         tools:targetApi="31">
         <activity
+            android:name=".CrearCuentaActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuPrincipalActivity"
             android:exported="false" />
         <activity

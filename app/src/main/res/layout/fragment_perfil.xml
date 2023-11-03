@@ -5,10 +5,60 @@
     android:layout_height="match_parent"
     tools:context=".PerfilFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
+        <EditText
+            android:id="@+id/fpNombre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50sp"
+            android:layout_marginBottom="5sp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="null" />
+
+        <EditText
+            android:id="@+id/fpApellidos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="null" />
+
+        <EditText
+            android:id="@+id/fpEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
+            android:editable="false"
+            android:ems="10"
+            android:inputType="text"
+            android:text="null" />
+
+        <EditText
+            android:id="@+id/fpTelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="null" />
+
+        <EditText
+            android:id="@+id/fpNacimiento"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp"
+            android:ems="10"
+            android:inputType="text"
+            android:text="null" />
+    </LinearLayout>
 </FrameLayout>
