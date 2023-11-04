@@ -16,7 +16,7 @@ public class MenuPrincipalActivity extends AppCompatActivity {
 
     String id;
     PerfilFragment perfilFragment = new PerfilFragment();
-    //MaterialFragment materialFragment = new MaterialFragment();
+    MaterialFragment materialFragment = new MaterialFragment();
     BulderFragment boulderFragment = new BulderFragment();
     //CuerdaFragment cuerdaFragment = new CuerdaFragment();
 
@@ -43,7 +43,9 @@ public class MenuPrincipalActivity extends AppCompatActivity {
                 if (id == R.id.menu_perfil){
                     seleccionarFragment(perfilFragment);
                 }
-
+                if (id == R.id.menu_material){
+                    seleccionarFragment(materialFragment);
+                }
 
                 if (id == R.id.menu_bulder){
                     seleccionarFragment(boulderFragment);
