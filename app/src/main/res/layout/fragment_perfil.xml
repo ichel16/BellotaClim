@@ -1,20 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".PerfilFragment">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50sp"
         android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Datos del Escalador"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/fpNombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15sp"
             android:layout_marginTop="50sp"
+            android:layout_marginRight="15sp"
             android:layout_marginBottom="5sp"
             android:ems="10"
             android:inputType="text"
@@ -24,7 +38,9 @@
             android:id="@+id/fpApellidos"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15sp"
             android:layout_marginTop="5sp"
+            android:layout_marginRight="15sp"
             android:layout_marginBottom="5sp"
             android:ems="10"
             android:inputType="text"
@@ -34,7 +50,9 @@
             android:id="@+id/fpEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15sp"
             android:layout_marginTop="5sp"
+            android:layout_marginRight="15sp"
             android:layout_marginBottom="5sp"
             android:editable="false"
             android:ems="10"
@@ -45,7 +63,9 @@
             android:id="@+id/fpTelefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15sp"
             android:layout_marginTop="5sp"
+            android:layout_marginRight="15sp"
             android:layout_marginBottom="5sp"
             android:ems="10"
             android:inputType="text"
@@ -55,10 +75,52 @@
             android:id="@+id/fpNacimiento"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="15sp"
             android:layout_marginTop="5sp"
+            android:layout_marginRight="15sp"
             android:layout_marginBottom="5sp"
             android:ems="10"
             android:inputType="text"
             android:text="null" />
+
+        <LinearLayout
+            android:id="@+id/fpLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="50sp"
+            android:visibility="invisible">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20sp"
+                android:layout_weight="1"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20sp"
+                android:layout_weight="1"
+                android:text="Button" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Reservas Actuales"
+            android:textAlignment="center"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/fpTVmaterialReservado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView" />
+
     </LinearLayout>
 </FrameLayout>

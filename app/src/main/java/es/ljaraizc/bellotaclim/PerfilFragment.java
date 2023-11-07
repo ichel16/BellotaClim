@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,6 +32,8 @@ import java.util.Map;
 public class PerfilFragment extends Fragment {
 
     EditText fpNombre, fpApellidos, fpEmail, fpTelefono, fpNacimiento;
+
+    LinearLayout fpLinearLayout;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,6 +89,8 @@ public class PerfilFragment extends Fragment {
         fpTelefono = view.findViewById(R.id.fpTelefono);
         fpNacimiento = view.findViewById(R.id.fpNacimiento);
 
+        fpLinearLayout = view.findViewById(R.id.fpLinearLayout);
+
 
         consultarDatosUsuario(id, view);
 
@@ -109,6 +114,8 @@ public class PerfilFragment extends Fragment {
                         fpEmail.setText(document.getString("email"));
                         fpTelefono.setText(document.getString("telefono"));
                         fpNacimiento.setText(document.getString("año nacimiento"));
+
+                        if (document.getString("rol").equalsIgnoreCase("admin")) fpLinearLayout.setVisibility(View.VISIBLE);
 
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                     } else {

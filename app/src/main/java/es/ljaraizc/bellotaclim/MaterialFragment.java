@@ -9,7 +9,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,6 +35,9 @@ public class MaterialFragment extends Fragment {
     private ListView fmLVmaterial;
     private List<Material> listaMaterial = new ArrayList<>();
     private MaterialListAdapter materialListAdapter;
+
+    private TextView fmTVresumenReserva;
+    private Button fmBreservar;
 
 
 
@@ -82,37 +89,35 @@ public class MaterialFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_material, container, false);
 
         fmLVmaterial = view.findViewById(R.id.fmLVmaterial);
-
-        Material material = new Material();
-        material.setTipo("Pies de Gato");
-        material.setMarca("Esportiva");
-        material.setModelo("Zenit");
-        material.setImagen(R.drawable.emoji_rope);
-        material.setTalla("Talla: 40");
-        material.setNombreEscalador("Leo");
-
-        Material material2 = new Material();
-        material2.setTipo("Pies de Gato");
-        material2.setMarca("Tenaya");
-        material2.setModelo("Rojitos");
-        material2.setImagen(R.drawable.emoji_casco);
-        material2.setTalla("Talla: 38");
-        material2.setNombreEscalador("Leito");
-
-        listaMaterial.add(material);
-        listaMaterial.add(material2);
+        fmTVresumenReserva = view.findViewById(R.id.fmTVresumenReserva);
+        fmBreservar = view.findViewById(R.id.fmBreservar);
 
         consultarMaterialDisponible();
 
-        materialListAdapter = new MaterialListAdapter(getActivity(),R.layout.item_material_fila,listaMaterial);
+        fmLVmaterial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        fmLVmaterial.setAdapter(materialListAdapter);
+                //Obtenemos el item seleccionado y lo convertimos a un objeto de tipo Material.
+                //Así podemos interactuar con él.
+                Material material = (Material) parent.getItemAtPosition(position);
+
+                Toast.makeText(getActivity(), "Reservas: " + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo(), Toast.LENGTH_SHORT).show();
+
+                fmTVresumenReserva.setText("Reserva seleccionada:\n" + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo());
+
+                fmBreservar.isClickable();
+
+            }
+        });
 
 
         return view;
     }
 
     public void consultarMaterialDisponible(){
+
+        listaMaterial.clear();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -130,12 +135,19 @@ public class MaterialFragment extends Fragment {
                                 material.setModelo(document.getString("Modelo"));
                                 material.setTipo(document.getString("Tipo"));
                                 material.setTalla(document.getString("Talla"));
-                                material.setImagen(R.drawable.emoji_pies_gato);
+
+                                if (material.getTipo().equalsIgnoreCase("Cuerda")) material.setImagen(R.drawable.emoji_rope);
+                                if (material.getTipo().equalsIgnoreCase("Pies de Gato")) material.setImagen(R.drawable.emoji_pies_gato);
+                                if (material.getTipo().equalsIgnoreCase("Casco")) material.setImagen(R.drawable.emoji_casco);
+                                if (material.getTipo().equalsIgnoreCase("Arnés")) material.setImagen(R.drawable.emoji_arnes);
 
                                 listaMaterial.add(material);
 
-
                             }
+
+                            materialListAdapter = new MaterialListAdapter(getActivity(),R.layout.item_material_fila,listaMaterial);
+                            fmLVmaterial.setAdapter(materialListAdapter);
+
                         } else {
                             Log.w("TAG", "Error getting documents.", task.getException());
                         }
