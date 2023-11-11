@@ -5,7 +5,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -31,22 +29,17 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link BulderFragment#newInstance} factory method to
+ * Use the {@link CuerdaFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BulderFragment extends Fragment {
+public class CuerdaFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-    private Spinner fbSpinnerDia;
-    private Spinner fbSpinnerHora;
+    private Spinner fcSpinnerDia;
+    private Spinner fcSpinnerHora;
 
     private List<String> horario = new ArrayList<>();
     private List<String> listaHorasOcupadas = new ArrayList<>();
@@ -54,11 +47,17 @@ public class BulderFragment extends Fragment {
     List<String> listaDia = new ArrayList<>();
     private ArrayAdapter<String> mAdapterHorario, mAdapterHora, mAdapterDia;
 
+
+    // TODO: Rename parameter arguments, choose names that match
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-    public BulderFragment() {
+    public CuerdaFragment() {
         // Required empty public constructor
     }
 
@@ -68,11 +67,11 @@ public class BulderFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BulderFragment.
+     * @return A new instance of fragment CuerdaFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BulderFragment newInstance(String param1, String param2) {
-        BulderFragment fragment = new BulderFragment();
+    public static CuerdaFragment newInstance(String param1, String param2) {
+        CuerdaFragment fragment = new CuerdaFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -93,9 +92,7 @@ public class BulderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        //return inflater.inflate(R.layout.fragment_bulder, container, false);
-
-        View view = inflater.inflate(R.layout.fragment_bulder, container, false);
+        View view = inflater.inflate(R.layout.fragment_cuerda, container, false);
 
         //Obtenemos el año, mes y día en el que nos encontramos.
         Calendar calendar = new GregorianCalendar();
@@ -103,21 +100,20 @@ public class BulderFragment extends Fragment {
         int mes = calendar.get(Calendar.MONTH);
         int dia = calendar.get(Calendar.DAY_OF_MONTH);
 
-
         listaDia.add(año+"-"+(mes+1)+"-"+dia);
         listaDia.add(año+"-"+(mes+1)+"-"+(dia+1));
 
-        fbSpinnerDia = view.findViewById(R.id.fbSpinnerDia);
+        fcSpinnerDia = view.findViewById(R.id.fcSpinnerDia);
         mAdapterDia = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item,listaDia);
-        fbSpinnerDia.setAdapter(mAdapterDia);
+        fcSpinnerDia.setAdapter(mAdapterDia);
 
         crearHoras();
-        fbSpinnerHora = view.findViewById(R.id.fbSpinnerHora);
+        fcSpinnerHora = view.findViewById(R.id.fcSpinnerHora);
         mAdapterHora = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item,listaHora);
-        fbSpinnerHora.setAdapter(mAdapterHora);
+        fcSpinnerHora.setAdapter(mAdapterHora);
 
         // ---------> Consultar Aforo con Spinner.
-        fbSpinnerDia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        fcSpinnerDia.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View views, int position, long id) {
                 consultarAforo(view);
@@ -132,7 +128,7 @@ public class BulderFragment extends Fragment {
 
 
         // -------> Botón reservar cita.
-        Button fbBReservar = view.findViewById(R.id.fbBReservar);
+        Button fbBReservar = view.findViewById(R.id.fcBReservar);
 
         fbBReservar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,8 +139,6 @@ public class BulderFragment extends Fragment {
 
             }
         });
-
-
 
         return view;
     }
@@ -163,10 +157,10 @@ public class BulderFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String, Object> reserva = new HashMap<>();
-        reserva.put("Dia", fbSpinnerDia.getSelectedItem().toString());
+        reserva.put("Dia", fcSpinnerDia.getSelectedItem().toString());
         reserva.put("Escalador", "PruebaLeonardo");
-        reserva.put("Hora", fbSpinnerHora.getSelectedItem().toString());
-        reserva.put("Tipo", "Bulder");
+        reserva.put("Hora", fcSpinnerHora.getSelectedItem().toString());
+        reserva.put("Tipo", "Cuerda");
 
         // Add a new document with a generated ID
         db.collection("UsoSalas")
@@ -193,7 +187,7 @@ public class BulderFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("UsoSalas")
-                .whereEqualTo("Dia", fbSpinnerDia.getSelectedItem().toString())
+                .whereEqualTo("Dia", fcSpinnerDia.getSelectedItem().toString())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -204,7 +198,7 @@ public class BulderFragment extends Fragment {
                                 //listaHorasOcupadas.add(document.getData().toString());
                             }
 
-                            dibujarHorario(listaDia.get(fbSpinnerDia.getSelectedItemPosition()), view);
+                            dibujarHorario(listaDia.get(fcSpinnerDia.getSelectedItemPosition()), view);
 
                         }else {
                             Log.d("TAG","Error: ", task.getException());
@@ -258,7 +252,7 @@ public class BulderFragment extends Fragment {
 
         ListView fmLVhorario;
         mAdapterHorario = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1,horario);
-        fmLVhorario = view.findViewById(R.id.fbLvHorario);
+        fmLVhorario = view.findViewById(R.id.fcLvHorario);
         fmLVhorario.setAdapter(mAdapterHorario);
 
     }

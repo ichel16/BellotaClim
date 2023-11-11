@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".BulderFragment">
+    tools:context=".CuerdaFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -12,7 +12,7 @@
         android:layout_height="match_parent">
 
         <Button
-            android:id="@+id/fbBReservar"
+            android:id="@+id/fcBReservar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Reservar"
@@ -24,7 +24,7 @@
             app:layout_constraintVertical_bias="0.202" />
 
         <ListView
-            android:id="@+id/fbLvHorario"
+            android:id="@+id/fcLvHorario"
             android:layout_width="match_parent"
             android:layout_height="500sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,7 @@
             app:layout_constraintVertical_bias="1.0" />
 
         <Spinner
-            android:id="@+id/fbSpinnerDia"
+            android:id="@+id/fcSpinnerDia"
             android:layout_width="200sp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -45,7 +45,7 @@
             app:layout_constraintVertical_bias="0.128" />
 
         <Spinner
-            android:id="@+id/fbSpinnerHora"
+            android:id="@+id/fcSpinnerHora"
             android:layout_width="150sp"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -56,10 +56,10 @@
             app:layout_constraintVertical_bias="0.21" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¡Haz tu reserva en la sala de Bulder!"
+            android:text="!Haz tu reserva en la sala de Cuerda¡"
             android:textAlignment="center"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -68,7 +68,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.043" />
+            app:layout_constraintVertical_bias="0.05" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
