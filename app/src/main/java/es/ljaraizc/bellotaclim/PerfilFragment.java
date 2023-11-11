@@ -19,12 +19,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -136,22 +141,43 @@ public class PerfilFragment extends Fragment {
 
         fpTVmaterialReservado.setText("");
 
+        //Obtenemos el año, mes y día en el que nos encontramos.
+        Calendar calendar = new GregorianCalendar();
+        int año = calendar.get(Calendar.YEAR);
+        int mes = calendar.get(Calendar.MONTH);
+        int dia = calendar.get(Calendar.DAY_OF_MONTH);
+
+        List<String> listaDia = new ArrayList<>();
+
+        listaDia.clear();
+        listaDia.add(año+"-"+(mes+1)+"-"+dia);
+        listaDia.add(año+"-"+(mes+1)+"-"+(dia+1));
+
         db.collection("UsoSalas")
-                .whereEqualTo("Escalador", "PruebaLeonardo")
-                .whereEqualTo("Dia", "2023-11-11")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()){
+                        .where(Filter.and(
+                                Filter.equalTo("Escalador", id),
+                                Filter.or(
+                                        Filter.equalTo("Dia", listaDia.get(0)),
+                                        Filter.equalTo("Dia",listaDia.get(1))
+                                )
+                        )).get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()){
+                                    for (QueryDocumentSnapshot document : task.getResult()){
 
-                                fpTVmaterialReservado.append("Sala " + document.getString("Tipo") + ", hoy a las: " + document.getString("Hora") + "\n");
+                                        fpTVmaterialReservado.append("Sala " + document.getString("Tipo") + ", día " + document.getString("Dia") + " a las: " + document.getString("Hora") + "\n");
 
+                                    }
+                                }
                             }
-                        }
-                    }
-                });
+                        });
+
+
+
+
+
 
 
 

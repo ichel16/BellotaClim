@@ -64,6 +64,7 @@ public class MenuPrincipalActivity extends AppCompatActivity {
 
     public void seleccionarFragment(Fragment fragment){
 
+        //Enviamos el id del usuario a los fragment.
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
 

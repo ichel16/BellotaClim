@@ -94,12 +94,15 @@ public class CuerdaFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_cuerda, container, false);
 
+        String id = this.getArguments().getString("id");
+
         //Obtenemos el año, mes y día en el que nos encontramos.
         Calendar calendar = new GregorianCalendar();
         int año = calendar.get(Calendar.YEAR);
         int mes = calendar.get(Calendar.MONTH);
         int dia = calendar.get(Calendar.DAY_OF_MONTH);
 
+        listaDia.clear();
         listaDia.add(año+"-"+(mes+1)+"-"+dia);
         listaDia.add(año+"-"+(mes+1)+"-"+(dia+1));
 
@@ -134,7 +137,7 @@ public class CuerdaFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                crearReserva();
+                crearReserva(id);
                 consultarAforo(view);
 
             }
@@ -144,6 +147,8 @@ public class CuerdaFragment extends Fragment {
     }
 
     public void crearHoras(){
+
+        listaHora.clear();
         listaHora.add("08:00");
         listaHora.add("10:00");
         listaHora.add("12:00");
@@ -152,13 +157,13 @@ public class CuerdaFragment extends Fragment {
         listaHora.add("20:00");
     }
 
-    public void crearReserva(){
+    public void crearReserva(String id){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         Map<String, Object> reserva = new HashMap<>();
         reserva.put("Dia", fcSpinnerDia.getSelectedItem().toString());
-        reserva.put("Escalador", "PruebaLeonardo");
+        reserva.put("Escalador", id);
         reserva.put("Hora", fcSpinnerHora.getSelectedItem().toString());
         reserva.put("Tipo", "Cuerda");
 
@@ -188,6 +193,7 @@ public class CuerdaFragment extends Fragment {
 
         db.collection("UsoSalas")
                 .whereEqualTo("Dia", fcSpinnerDia.getSelectedItem().toString())
+                .whereEqualTo("Tipo","Cuerda")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
