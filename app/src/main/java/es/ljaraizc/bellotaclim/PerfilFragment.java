@@ -104,9 +104,73 @@ public class PerfilFragment extends Fragment {
         fpLinearLayout = view.findViewById(R.id.fpLinearLayout);
 
 
+        consultarSalasReservadas(id);
         consultarDatosUsuario(id, view);
+        consultarMaterialAlquilado(id);
 
         return view;
+    }
+
+    public void consultarMaterialAlquilado(String id){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Material")
+                .whereEqualTo("Id_escalador", id)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+
+                                fpTVmaterialReservado.append("Material: " + document.getString("Tipo") + ", marca " + document.getString("Marca") + ", modelo: " + document.getString("Modelo") + "\n");
+
+                            }
+                        }
+                    }
+                });
+
+    }
+
+    public void consultarSalasReservadas(String id){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        fpTVmaterialReservado.setText("");
+
+        //Obtenemos el año, mes y día en el que nos encontramos.
+        Calendar calendar = new GregorianCalendar();
+        int año = calendar.get(Calendar.YEAR);
+        int mes = calendar.get(Calendar.MONTH);
+        int dia = calendar.get(Calendar.DAY_OF_MONTH);
+
+        List<String> listaDia = new ArrayList<>();
+
+        listaDia.clear();
+        listaDia.add(año+"-"+(mes+1)+"-"+dia);
+        listaDia.add(año+"-"+(mes+1)+"-"+(dia+1));
+
+        db.collection("UsoSalas")
+                .where(Filter.and(
+                        Filter.equalTo("Escalador", id),
+                        Filter.or(
+                                Filter.equalTo("Dia", listaDia.get(0)),
+                                Filter.equalTo("Dia",listaDia.get(1))
+                        )
+                )).get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+
+                                fpTVmaterialReservado.append("Sala " + document.getString("Tipo") + ", día " + document.getString("Dia") + " a las: " + document.getString("Hora") + "\n");
+
+                            }
+                        }
+                    }
+                });
     }
 
     public void consultarDatosUsuario(String id, View view){
@@ -138,47 +202,6 @@ public class PerfilFragment extends Fragment {
                 }
             }
         });
-
-        fpTVmaterialReservado.setText("");
-
-        //Obtenemos el año, mes y día en el que nos encontramos.
-        Calendar calendar = new GregorianCalendar();
-        int año = calendar.get(Calendar.YEAR);
-        int mes = calendar.get(Calendar.MONTH);
-        int dia = calendar.get(Calendar.DAY_OF_MONTH);
-
-        List<String> listaDia = new ArrayList<>();
-
-        listaDia.clear();
-        listaDia.add(año+"-"+(mes+1)+"-"+dia);
-        listaDia.add(año+"-"+(mes+1)+"-"+(dia+1));
-
-        db.collection("UsoSalas")
-                        .where(Filter.and(
-                                Filter.equalTo("Escalador", id),
-                                Filter.or(
-                                        Filter.equalTo("Dia", listaDia.get(0)),
-                                        Filter.equalTo("Dia",listaDia.get(1))
-                                )
-                        )).get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()){
-                                    for (QueryDocumentSnapshot document : task.getResult()){
-
-                                        fpTVmaterialReservado.append("Sala " + document.getString("Tipo") + ", día " + document.getString("Dia") + " a las: " + document.getString("Hora") + "\n");
-
-                                    }
-                                }
-                            }
-                        });
-
-
-
-
-
-
 
 
     }

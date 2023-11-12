@@ -2,6 +2,7 @@ package es.ljaraizc.bellotaclim;
 
 public class Material {
 
+    private String idMaterial;
     private String tipo;
     private String marca;
     private String modelo;
@@ -12,7 +13,8 @@ public class Material {
     public Material() {
     }
 
-    public Material(String tipo, String marca, String modelo, String talla, String nombreEscalador, int imagen) {
+    public Material(String idMaterial, String tipo, String marca, String modelo, String talla, String nombreEscalador, int imagen) {
+        this.idMaterial = idMaterial;
         this.tipo = tipo;
         this.marca = marca;
         this.modelo = modelo;
@@ -20,6 +22,10 @@ public class Material {
         this.nombreEscalador = nombreEscalador;
         this.imagen = imagen;
     }
+
+    public String getIdMaterial(){return idMaterial; }
+
+    public void setIdMaterial(String idMaterial){this.idMaterial = idMaterial; }
 
     public String getTipo() {
         return tipo;

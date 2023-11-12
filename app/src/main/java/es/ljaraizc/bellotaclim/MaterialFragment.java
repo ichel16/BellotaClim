@@ -16,7 +16,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -40,6 +42,8 @@ public class MaterialFragment extends Fragment {
 
     private TextView fmTVresumenReserva;
     private Button fmBreservar;
+
+    private Material material;
 
 
 
@@ -90,9 +94,14 @@ public class MaterialFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_material, container, false);
 
+        String idEscalador = this.getArguments().getString("id");
+        String email = this.getArguments().getString("email");
+
         fmLVmaterial = view.findViewById(R.id.fmLVmaterial);
         fmTVresumenReserva = view.findViewById(R.id.fmTVresumenReserva);
         fmBreservar = view.findViewById(R.id.fmBreservar);
+
+        fmTVresumenReserva.setText("Pulsa sobre el elemento que quieres reservar.");
 
         consultarMaterialDisponible();
 
@@ -102,19 +111,48 @@ public class MaterialFragment extends Fragment {
 
                 //Obtenemos el item seleccionado y lo convertimos a un objeto de tipo Material.
                 //Así podemos interactuar con él.
-                Material material = (Material) parent.getItemAtPosition(position);
+                material = (Material) parent.getItemAtPosition(position);
 
-                Toast.makeText(getActivity(), "Reservas: " + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Reservas: " + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo(), Toast.LENGTH_SHORT).show();
 
                 fmTVresumenReserva.setText("Reserva seleccionada:\n" + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo());
+                fmTVresumenReserva.append("\n ID: " + material.getIdMaterial());
 
-                fmBreservar.isClickable();
+                fmBreservar.setEnabled(true);
+
+            }
+        });
+
+        fmBreservar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                realizarReserva(material, email, idEscalador);
+                consultarMaterialDisponible();
 
             }
         });
 
 
         return view;
+    }
+
+    public void realizarReserva(Material m, String email, String id){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference materialRef = db.collection("Material").document(m.getIdMaterial());
+
+        materialRef
+                .update("Libre", false,"Email", email, "Id_escalador", id)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+
+                    }
+                });
+
+
+
     }
 
     public void consultarMaterialDisponible(){
@@ -124,6 +162,7 @@ public class MaterialFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("Material")
+                .whereEqualTo("Libre", true)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -137,6 +176,8 @@ public class MaterialFragment extends Fragment {
                                 material.setModelo(document.getString("Modelo"));
                                 material.setTipo(document.getString("Tipo"));
                                 material.setTalla(document.getString("Talla"));
+
+                                material.setIdMaterial(document.getId());
 
                                 if (material.getTipo().equalsIgnoreCase("Cuerda")) material.setImagen(R.drawable.emoji_rope);
                                 if (material.getTipo().equalsIgnoreCase("Pies de Gato")) material.setImagen(R.drawable.emoji_pies_gato);

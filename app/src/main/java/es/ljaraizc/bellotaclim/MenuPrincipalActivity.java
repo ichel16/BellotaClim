@@ -15,6 +15,7 @@ import com.google.android.material.navigation.NavigationBarView;
 public class MenuPrincipalActivity extends AppCompatActivity {
 
     String id;
+    String email;
     PerfilFragment perfilFragment = new PerfilFragment();
     MaterialFragment materialFragment = new MaterialFragment();
     BulderFragment boulderFragment = new BulderFragment();
@@ -28,6 +29,7 @@ public class MenuPrincipalActivity extends AppCompatActivity {
         //Recibimos el id del usuario.
         Bundle bundle = getIntent().getExtras();
         id = bundle.getString("id");
+        email = bundle.getString("email");
         //Toast.makeText(this, id, Toast.LENGTH_SHORT).show();
 
         seleccionarFragment(perfilFragment);
@@ -67,6 +69,7 @@ public class MenuPrincipalActivity extends AppCompatActivity {
         //Enviamos el id del usuario a los fragment.
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
+        bundle.putString("email", email);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 

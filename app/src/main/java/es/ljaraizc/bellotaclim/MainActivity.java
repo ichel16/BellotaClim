@@ -248,6 +248,7 @@ public class MainActivity extends AppCompatActivity {
     public void abrirActividadMenuPrincipal(String id){
         Intent intent = new Intent(this, MenuPrincipalActivity.class);
         intent.putExtra("id", id);
+        intent.putExtra("email", edNombre.getText().toString());
         startActivity(intent);
     }
 
