@@ -16,13 +16,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 public class AdminMaterialActivity extends AppCompatActivity {
@@ -73,7 +79,9 @@ public class AdminMaterialActivity extends AppCompatActivity {
                 dialogo.setPositiveButton("Liberar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(AdminMaterialActivity.this, "CONFIRMADO!", Toast.LENGTH_SHORT).show();
+
+                        crearHistorico(material);
+
                     }
                 });
 
@@ -190,5 +198,50 @@ public class AdminMaterialActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    public void crearHistorico(Material m){
+
+        //Obtenemos el año, mes y día en el que nos encontramos.
+        Calendar calendar = new GregorianCalendar();
+        int año = calendar.get(Calendar.YEAR);
+        int mes = calendar.get(Calendar.MONTH);
+        int dia = calendar.get(Calendar.DAY_OF_MONTH);
+
+        String fecha = (año+"-"+(mes+1)+"-"+dia);
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> materialHistorico = new HashMap<>();
+
+        materialHistorico.put("Id_material", m.getIdMaterial());
+        materialHistorico.put("Email", m.getEmailEscalador());
+        materialHistorico.put("Dia", fecha);
+
+        db.collection("MaterialHistorico")
+                .add(materialHistorico)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                        liberarMaterial(m);
+                    }
+                });
+
+    }
+
+    public void liberarMaterial(Material m){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference materialRef = db.collection("Material").document(m.getIdMaterial());
+
+        materialRef
+                .update("Libre", true,"Email", "", "Id_escalador", "")
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d("TAG", "Datos actualizados.");
+                    }
+                });
+    }
+
+
 
 }
