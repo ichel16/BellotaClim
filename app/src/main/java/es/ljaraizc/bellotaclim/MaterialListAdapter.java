@@ -58,7 +58,7 @@ public class MaterialListAdapter extends ArrayAdapter<Material> {
         tvLVmaterialTalla.setText(material.getTalla());
 
         TextView tvLVmaterialNombre = view.findViewById(R.id.tvLVmaterialNombre);
-        tvLVmaterialNombre.setText(material.getNombreEscalador());
+        tvLVmaterialNombre.setText(material.getEmailEscalador());
 
         return view;
     }

@@ -7,19 +7,19 @@ public class Material {
     private String marca;
     private String modelo;
     private String talla;
-    private String nombreEscalador;
+    private String emailEscalador;
     private int imagen;
 
     public Material() {
     }
 
-    public Material(String idMaterial, String tipo, String marca, String modelo, String talla, String nombreEscalador, int imagen) {
+    public Material(String idMaterial, String tipo, String marca, String modelo, String talla, String emailEscalador, int imagen) {
         this.idMaterial = idMaterial;
         this.tipo = tipo;
         this.marca = marca;
         this.modelo = modelo;
         this.talla = talla;
-        this.nombreEscalador = nombreEscalador;
+        this.emailEscalador = emailEscalador;
         this.imagen = imagen;
     }
 
@@ -59,12 +59,12 @@ public class Material {
         this.talla = talla;
     }
 
-    public String getNombreEscalador() {
-        return nombreEscalador;
+    public String getEmailEscalador() {
+        return emailEscalador;
     }
 
-    public void setNombreEscalador(String nombreEscalador) {
-        this.nombreEscalador = nombreEscalador;
+    public void setEmailEscalador(String emailEscalador) {
+        this.emailEscalador = emailEscalador;
     }
 
     public int getImagen() {

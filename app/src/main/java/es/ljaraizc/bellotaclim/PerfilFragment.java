@@ -1,5 +1,6 @@
 package es.ljaraizc.bellotaclim;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -40,6 +42,8 @@ import java.util.Map;
 public class PerfilFragment extends Fragment {
 
     EditText fpNombre, fpApellidos, fpEmail, fpTelefono, fpNacimiento;
+
+    Button fpBadminMaterial, fpBadminHistorico;
 
     TextView fpTVmaterialReservado;
 
@@ -108,6 +112,20 @@ public class PerfilFragment extends Fragment {
         consultarDatosUsuario(id, view);
         consultarMaterialAlquilado(id);
 
+        fpBadminMaterial = view.findViewById(R.id.fpBadminMaterial);
+
+        fpBadminMaterial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirActividadAdminMaterial(id);
+            }
+        });
+
+
+        fpBadminHistorico = view.findViewById(R.id.fpBadminHistorico);
+
+
+
         return view;
     }
 
@@ -172,7 +190,6 @@ public class PerfilFragment extends Fragment {
                     }
                 });
     }
-
     public void consultarDatosUsuario(String id, View view){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -204,5 +221,11 @@ public class PerfilFragment extends Fragment {
         });
 
 
+    }
+    public void abrirActividadAdminMaterial(String id){
+        Intent intent = new Intent(getActivity(), AdminMaterialActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("email", fpEmail.getText().toString());
+        startActivity(intent);
     }
 }

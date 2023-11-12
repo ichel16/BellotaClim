@@ -116,7 +116,7 @@ public class MaterialFragment extends Fragment {
                 //Toast.makeText(getActivity(), "Reservas: " + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo(), Toast.LENGTH_SHORT).show();
 
                 fmTVresumenReserva.setText("Reserva seleccionada:\n" + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo());
-                fmTVresumenReserva.append("\n ID: " + material.getIdMaterial());
+                //fmTVresumenReserva.append("\n ID: " + material.getIdMaterial());
 
                 fmBreservar.setEnabled(true);
 
@@ -147,7 +147,7 @@ public class MaterialFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-
+                        Toast.makeText(getActivity(), "¡Reserva realiza!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
