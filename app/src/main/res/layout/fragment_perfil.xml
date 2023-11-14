@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20sp"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="Gestión Material" />
 
             <Button
                 android:id="@+id/fpBadminHistorico"
@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20sp"
                 android:layout_weight="1"
-                android:text="Button" />
+                android:text="Histórico" />
         </LinearLayout>
 
         <TextView

@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                            Toast.makeText(MainActivity.this, "Autentificación fallida.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -200,11 +200,15 @@ public class MainActivity extends AppCompatActivity {
     public void updateUI(FirebaseUser account){
 
         if(account != null){
-            Toast.makeText(this,"You Signed In successfully",Toast.LENGTH_LONG).show();
+            Toast.makeText(this,"Te has logueado correctamente.",Toast.LENGTH_SHORT).show();
+
+            etPass.setText("");
+            edNombre.setText("");
+
             //startActivity(new Intent(this,AnotherActivity.class));
 
         }else {
-            Toast.makeText(this,"You Didnt signed in",Toast.LENGTH_LONG).show();
+            //Toast.makeText(this,"You Didnt signed in",Toast.LENGTH_LONG).show();
         }
 
     }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class AdminMaterialActivity extends AppCompatActivity {
     private ListView aAMLVmaterial;
     private MaterialListAdapter materialListAdapter;
     private List<Material> listaMaterial = new ArrayList<>();
+    private int posicionEmail = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class AdminMaterialActivity extends AppCompatActivity {
         aAMspinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                posicionEmail = position;
                 consultarMaterialUsuario(listaEmail.get(position));
             }
 
@@ -93,6 +96,15 @@ public class AdminMaterialActivity extends AppCompatActivity {
                 });
                 dialogo.show();
 
+            }
+        });
+
+        Button aAMbVolver = findViewById(R.id.aAMbVolver);
+
+        aAMbVolver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -238,7 +250,11 @@ public class AdminMaterialActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d("TAG", "Datos actualizados.");
+
+                        //Actualizamos el listado para que desaparezca el objeto liberado.
+                        consultarMaterialUsuario(listaEmail.get(posicionEmail));
                     }
+
                 });
     }
 
