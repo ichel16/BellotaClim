@@ -18,6 +18,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -149,6 +151,38 @@ public class CrearCuentaActivity extends AppCompatActivity {
                 })
         ;*/
 
+    }
+
+    public boolean comprobarSiEsSocio(){
+        boolean[] socio = {false};
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Socios")
+                .whereEqualTo("Id_socio", "09090909Y")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        boolean registrado = true;
+                        if (task.isSuccessful()){
+
+                            for (QueryDocumentSnapshot document : task.getResult()){
+
+                                registrado = document.getBoolean("Registrado");
+
+                            }
+
+                            if (!registrado){
+
+                                socio[0] = true;
+                            }
+                        }
+
+                    }
+                });
+
+        return socio[0];
     }
 
 

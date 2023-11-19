@@ -47,7 +47,7 @@ public class PerfilFragment extends Fragment {
 
     EditText fpNombre, fpApellidos, fpEmail, fpTelefono, fpNacimiento;
 
-    Button fpBadminMaterial, fpBadminHistorico;
+    Button fpBadminMaterial, fpBadminHistorico, fpBcerrarSesion;
 
     TextView fpTVmaterialReservado;
 
@@ -104,26 +104,7 @@ public class PerfilFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
 
-                AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
-                dialogo.setTitle("Cerrar Sesión.");
-                dialogo.setMessage("¿Quieres cerrar la sesión?");
-                dialogo.setCancelable(false);
-                dialogo.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        getActivity().finish();
-
-                    }
-                });
-
-                dialogo.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-                dialogo.show();
+                cerrarSesionDialogo();
 
             }
         };
@@ -160,9 +141,41 @@ public class PerfilFragment extends Fragment {
 
         fpBadminHistorico = view.findViewById(R.id.fpBadminHistorico);
 
+        fpBcerrarSesion = view.findViewById(R.id.fpBcerrarSesion);
+
+        fpBcerrarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cerrarSesionDialogo();
+            }
+        });
+
 
 
         return view;
+    }
+
+    public void cerrarSesionDialogo(){
+        AlertDialog.Builder dialogo = new AlertDialog.Builder(getContext());
+        dialogo.setTitle("Cerrar Sesión.");
+        dialogo.setMessage("¿Quieres cerrar la sesión?");
+        dialogo.setCancelable(false);
+        dialogo.setPositiveButton("Sí", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                getActivity().finish();
+
+            }
+        });
+
+        dialogo.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        dialogo.show();
     }
 
     public void consultarMaterialAlquilado(String id){

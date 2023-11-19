@@ -196,8 +196,6 @@ public class MaterialFragment extends Fragment {
                         }
                     }
                 });
-
-
     }
 
 }

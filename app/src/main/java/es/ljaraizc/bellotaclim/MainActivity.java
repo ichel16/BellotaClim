@@ -193,10 +193,6 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-
-
-
-
     public void updateUI(FirebaseUser account){
 
         if(account != null){
