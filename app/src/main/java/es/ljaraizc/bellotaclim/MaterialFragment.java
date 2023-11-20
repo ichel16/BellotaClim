@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,10 +41,10 @@ public class MaterialFragment extends Fragment {
     private ListView fmLVmaterial;
     private List<Material> listaMaterial = new ArrayList<>();
     private MaterialListAdapter materialListAdapter;
-
+    private Spinner fmStipo;
+    private ArrayAdapter<String> mAdapterTipoMaterial;
     private TextView fmTVresumenReserva;
     private Button fmBreservar;
-
     private Material material;
 
 
@@ -103,7 +105,8 @@ public class MaterialFragment extends Fragment {
 
         fmTVresumenReserva.setText("Pulsa sobre el elemento que quieres reservar.");
 
-        consultarMaterialDisponible();
+        //Con el Spinner ya no es necesario.
+        //consultarMaterialDisponible();
 
         fmLVmaterial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -119,6 +122,36 @@ public class MaterialFragment extends Fragment {
                 //fmTVresumenReserva.append("\n ID: " + material.getIdMaterial());
 
                 fmBreservar.setEnabled(true);
+
+            }
+        });
+
+        fmStipo = view.findViewById(R.id.fmStipo);
+
+        List<String> tipoMaterial = new ArrayList<>();
+        tipoMaterial.add("Sin Filtro");
+        tipoMaterial.add("Casco");
+        tipoMaterial.add("Arnés");
+        tipoMaterial.add("Pies de Gato");
+        tipoMaterial.add("Cuerda");
+
+        mAdapterTipoMaterial = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_spinner_item,tipoMaterial);
+        fmStipo.setAdapter(mAdapterTipoMaterial);
+
+        fmStipo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                if (position == 0){
+                    consultarMaterialDisponible();
+                }else {
+                    consultarMaterialDisponiblePorTipo(tipoMaterial.get(position).toString());
+                }
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
@@ -163,6 +196,50 @@ public class MaterialFragment extends Fragment {
 
         db.collection("Material")
                 .whereEqualTo("Libre", true)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Log.d("TAG", document.getId() + " => " + document.getData());
+
+                                Material material = new Material();
+                                material.setMarca(document.getString("Marca"));
+                                material.setModelo(document.getString("Modelo"));
+                                material.setTipo(document.getString("Tipo"));
+                                material.setTalla(document.getString("Talla"));
+
+                                material.setIdMaterial(document.getId());
+
+                                if (material.getTipo().equalsIgnoreCase("Cuerda")) material.setImagen(R.drawable.emoji_rope);
+                                if (material.getTipo().equalsIgnoreCase("Pies de Gato")) material.setImagen(R.drawable.emoji_pies_gato);
+                                if (material.getTipo().equalsIgnoreCase("Casco")) material.setImagen(R.drawable.emoji_casco);
+                                if (material.getTipo().equalsIgnoreCase("Arnés")) material.setImagen(R.drawable.emoji_arnes);
+
+                                listaMaterial.add(material);
+
+                            }
+
+                            materialListAdapter = new MaterialListAdapter(getActivity(),R.layout.item_material_fila,listaMaterial);
+                            fmLVmaterial.setAdapter(materialListAdapter);
+
+                        } else {
+                            Log.w("TAG", "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+    }
+
+    public void consultarMaterialDisponiblePorTipo(String tipo){
+
+        listaMaterial.clear();
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Material")
+                .whereEqualTo("Libre", true)
+                .whereEqualTo("Tipo", tipo)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
