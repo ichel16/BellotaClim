@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +48,7 @@ public class BulderFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
     private Spinner fbSpinnerDia;
     private Spinner fbSpinnerHora;
+    private boolean salaLlena = false;
 
     private List<String> horario = new ArrayList<>();
     private List<String> listaHorasOcupadas = new ArrayList<>();
@@ -140,8 +142,11 @@ public class BulderFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                crearReserva(id);
-                consultarAforo(view);
+
+                consultarHora(view, id);
+
+                //crearReserva(id);
+                //consultarAforo(view);
 
             }
         });
@@ -268,5 +273,39 @@ public class BulderFragment extends Fragment {
 
     }
 
+    public void consultarHora(View view, String id){
+
+        int[] contar = {0};
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("UsoSalas")
+                .whereEqualTo("Dia", fbSpinnerDia.getSelectedItem().toString())
+                .whereEqualTo("Hora", fbSpinnerHora.getSelectedItem().toString())
+                .whereEqualTo("Tipo","Bulder")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                contar[0]++;
+                            }
+
+                            if (contar[0]>=10){
+                                Toast.makeText(getContext(), "Lleno!", Toast.LENGTH_SHORT).show();
+                            }else {
+                                crearReserva(id);
+                                consultarAforo(view);
+                                Toast.makeText(getContext(), ""+contar[0], Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else {
+                            Log.d("TAG","Error: ", task.getException());
+                        }
+                    }
+                });
+
+    }
 
 }
