@@ -1,10 +1,14 @@
 package es.ljaraizc.bellotaclim;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +21,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -27,6 +33,7 @@ import java.util.Map;
 public class CrearCuentaActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
+    private String numeroSocio = "";
 
     EditText a1ETnombre, a1ETapellidos, a1ETemail, a1ETtelefono, a1ETedad, a1ETpass;
     Button a1bAceptar;
@@ -44,6 +51,11 @@ public class CrearCuentaActivity extends AppCompatActivity {
         a1ETtelefono = findViewById(R.id.a1ETtelefono);
         a1ETedad = findViewById(R.id.a1ETedad);
         a1ETpass = findViewById(R.id.a1ETpass);
+
+        crearDialogo();
+
+
+
 
         a1bAceptar = findViewById(R.id.a1bAceptar);
 
@@ -153,39 +165,83 @@ public class CrearCuentaActivity extends AppCompatActivity {
 
     }
 
-    public boolean comprobarSiEsSocio(){
-        boolean[] socio = {false};
+    public void crearDialogo(){
 
+        AlertDialog.Builder dialogo = new AlertDialog.Builder(this);
+        dialogo.setTitle("Número de Socio.");
+        dialogo.setMessage("Por seguridad, necesitamos que introduzcas tu número de socio.");
+        dialogo.setCancelable(false);
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        dialogo.setView(input);
+
+        dialogo.setPositiveButton("Adeptar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                numeroSocio = input.getText().toString();
+                if (numeroSocio.isEmpty())numeroSocio="blanco";
+                comprobarNumeroSocio(numeroSocio);
+                //Toast.makeText(CrearCuentaActivity.this, input.getText().toString(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        dialogo.show();
+
+    }
+
+    public void comprobarNumeroSocio(String numeroSocio){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        db.collection("Socios")
-                .whereEqualTo("Id_socio", "09090909Y")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        boolean registrado = true;
-                        if (task.isSuccessful()){
+        DocumentReference documentReference = db.collection("Socios").document(numeroSocio);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
 
-                            for (QueryDocumentSnapshot document : task.getResult()){
+                        if (document.getBoolean("Registrado")){
+                            Toast.makeText(CrearCuentaActivity.this, "Este usuario ya está registrado.", Toast.LENGTH_SHORT).show();
+                            a1bAceptar.setEnabled(false);
+                        }else {
+                            a1ETemail.setText(document.getString("Email"));
 
-                                registrado = document.getBoolean("Registrado");
-
-                            }
-
-                            if (!registrado){
-
-                                socio[0] = true;
-                            }
                         }
+
+
+                        Log.d("TAG", "DocumentSnapshot data: " + document.getData());
+                    } else {
+                        Log.d("TAG", "No such document");
+                        a1bAceptar.setEnabled(false);
+                        Toast.makeText(CrearCuentaActivity.this, "Necesitas ser socio para poder registrarte.", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Log.d("TAG", "get failed with ", task.getException());
+                }
+            }
+        });
+    }
+
+    public void socioRegistrado(String numeroSocio, String id){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference socioRef = db.collection("Socios").document(numeroSocio);
+
+        socioRef
+                .update("Registrado", true,
+                        "Id_usuario", id)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
 
                     }
                 });
-
-        return socio[0];
     }
-
-
     public void registrar(String email, String password){
 
         mAuth.createUserWithEmailAndPassword(email, password)
@@ -200,6 +256,10 @@ public class CrearCuentaActivity extends AppCompatActivity {
                             //Creamos el usuario y al documento le pasamos el Uid del usuario
                             //creado, así se vinculan los datos.
                             crearUsuario(user.getUid());
+
+                            //Actualizamos el documento del socio que se acaba de registrar
+                            //Para que nadie más use su número de socio.
+                            socioRegistrado(numeroSocio, user.getUid());
 
                             updateUI(user);
 

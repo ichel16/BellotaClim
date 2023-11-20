@@ -26,7 +26,7 @@
         <ListView
             android:id="@+id/fmLVmaterial"
             android:layout_width="wrap_content"
-            android:layout_height="474dp"
+            android:layout_height="450dp"
             android:paddingLeft="10sp"
             android:paddingRight="10sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +34,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fmStipo"
-            app:layout_constraintVertical_bias="0.058" />
+            app:layout_constraintVertical_bias="0.124" />
 
         <TextView
             android:id="@+id/fmTVresumenReserva"
