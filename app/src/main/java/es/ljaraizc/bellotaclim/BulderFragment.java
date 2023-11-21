@@ -142,16 +142,14 @@ public class BulderFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                consultarUsuarioTieneCita(view, id);
 
-                consultarHora(view, id);
-
+                //consultarHora(view, id);
                 //crearReserva(id);
                 //consultarAforo(view);
 
             }
         });
-
-
 
         return view;
     }
@@ -293,11 +291,11 @@ public class BulderFragment extends Fragment {
                             }
 
                             if (contar[0]>=10){
-                                Toast.makeText(getContext(), "Lleno!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(), "¡Sala llena! Por favor, elige otra hora.", Toast.LENGTH_SHORT).show();
                             }else {
                                 crearReserva(id);
                                 consultarAforo(view);
-                                Toast.makeText(getContext(), ""+contar[0], Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getContext(), ""+contar[0], Toast.LENGTH_SHORT).show();
                             }
 
                         }else {
@@ -306,6 +304,38 @@ public class BulderFragment extends Fragment {
                     }
                 });
 
+    }
+
+    public void consultarUsuarioTieneCita(View view, String id){
+        boolean[] tieneReserva = {false};
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("UsoSalas")
+                .whereEqualTo("Dia", fbSpinnerDia.getSelectedItem().toString())
+                .whereEqualTo("Escalador", id)
+                .whereEqualTo("Tipo","Bulder")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                tieneReserva[0]=true;
+                            }
+
+                            if (tieneReserva[0]){
+                                Toast.makeText(getContext(), "Solo puedes realizar una reserva por día.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                consultarHora(view, id);
+                                //Toast.makeText(getContext(), ""+contar[0], Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else {
+                            Log.d("TAG","Error: ", task.getException());
+                        }
+                    }
+                });
     }
 
 }

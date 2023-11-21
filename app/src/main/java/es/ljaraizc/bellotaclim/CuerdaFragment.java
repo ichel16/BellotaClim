@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -137,8 +138,9 @@ public class CuerdaFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                crearReserva(id);
-                consultarAforo(view);
+                consultarUsuarioTieneCita(view, id);
+                //crearReserva(id);
+                //consultarAforo(view);
 
             }
         });
@@ -249,18 +251,85 @@ public class CuerdaFragment extends Fragment {
 
         }
 
-        horario.add(fecha + " [08:00 - 10:00] - Aforo al: "+ ocho*10 +"%");
-        horario.add(fecha + " [10:00 - 12:00] - Aforo al: "+ diez*10 +"%");
-        horario.add(fecha + " [12:00 - 14:00] - Aforo al: "+ doce*10 +"%");
-        horario.add(fecha + " [16:00 - 18:00] - Aforo al: "+ dieciseis*10 +"%");
-        horario.add(fecha + " [18:00 - 20:00] - Aforo al: "+ dieciocho*10 +"%");
-        horario.add(fecha + " [20:00 - 22:00] - Aforo al: "+ veinte*10 +"%");
+        horario.add(fecha + " [08:00 - 10:00] - Aforo al: "+ ocho*20 +"%");
+        horario.add(fecha + " [10:00 - 12:00] - Aforo al: "+ diez*20 +"%");
+        horario.add(fecha + " [12:00 - 14:00] - Aforo al: "+ doce*20 +"%");
+        horario.add(fecha + " [16:00 - 18:00] - Aforo al: "+ dieciseis*20 +"%");
+        horario.add(fecha + " [18:00 - 20:00] - Aforo al: "+ dieciocho*20 +"%");
+        horario.add(fecha + " [20:00 - 22:00] - Aforo al: "+ veinte*20 +"%");
 
         ListView fmLVhorario;
         mAdapterHorario = new ArrayAdapter<>(view.getContext(), android.R.layout.simple_list_item_1,horario);
         fmLVhorario = view.findViewById(R.id.fcLvHorario);
         fmLVhorario.setAdapter(mAdapterHorario);
 
+    }
+
+    public void consultarHora(View view, String id){
+
+        int[] contar = {0};
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("UsoSalas")
+                .whereEqualTo("Dia", fcSpinnerDia.getSelectedItem().toString())
+                .whereEqualTo("Hora", fcSpinnerHora.getSelectedItem().toString())
+                .whereEqualTo("Tipo","Cuerda")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                contar[0]++;
+                            }
+
+                            if (contar[0]>=5){
+                                Toast.makeText(getContext(), "¡Sala llena! Por favor, elige otra hora.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                crearReserva(id);
+                                consultarAforo(view);
+                                //Toast.makeText(getContext(), ""+contar[0], Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else {
+                            Log.d("TAG","Error: ", task.getException());
+                        }
+                    }
+                });
+
+    }
+
+    public void consultarUsuarioTieneCita(View view, String id){
+        boolean[] tieneReserva = {false};
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("UsoSalas")
+                .whereEqualTo("Dia", fcSpinnerDia.getSelectedItem().toString())
+                .whereEqualTo("Escalador", id)
+                .whereEqualTo("Tipo","Cuerda")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            for (QueryDocumentSnapshot document : task.getResult()){
+                                tieneReserva[0]=true;
+                            }
+
+                            if (tieneReserva[0]){
+                                Toast.makeText(getContext(), "Solo puedes realizar una reserva por día.", Toast.LENGTH_SHORT).show();
+                            }else {
+                                consultarHora(view, id);
+                                //Toast.makeText(getContext(), ""+contar[0], Toast.LENGTH_SHORT).show();
+                            }
+
+                        }else {
+                            Log.d("TAG","Error: ", task.getException());
+                        }
+                    }
+                });
     }
 
 
