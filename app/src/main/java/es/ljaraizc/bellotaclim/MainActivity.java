@@ -178,9 +178,7 @@ public class MainActivity extends AppCompatActivity {
                             updateUI(user);
 
                             String id = user.getUid();
-
                             abrirActividadMenuPrincipal(id);
-
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -197,9 +195,6 @@ public class MainActivity extends AppCompatActivity {
 
         if(account != null){
             Toast.makeText(this,"Te has logueado correctamente.",Toast.LENGTH_SHORT).show();
-
-            etPass.setText("");
-            edNombre.setText("");
 
             //startActivity(new Intent(this,AnotherActivity.class));
 
@@ -249,6 +244,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, MenuPrincipalActivity.class);
         intent.putExtra("id", id);
         intent.putExtra("email", edNombre.getText().toString());
+        etPass.setText("");
+        edNombre.setText("");
         startActivity(intent);
     }
 

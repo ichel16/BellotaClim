@@ -180,7 +180,8 @@ public class MaterialFragment extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
-                        Toast.makeText(getActivity(), "¡Reserva realiza!", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getActivity(), "¡Reserva realiza!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "¡Reserva !"+email, Toast.LENGTH_SHORT).show();
                     }
                 });
 

@@ -10,7 +10,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50sp"
+        android:layout_marginTop="5sp"
         android:orientation="vertical">
 
         <TextView
@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15sp"
-            android:layout_marginTop="50sp"
+            android:layout_marginTop="20sp"
             android:layout_marginRight="15sp"
             android:layout_marginBottom="5sp"
             android:ems="10"
@@ -109,7 +109,7 @@
                 android:id="@+id/fpBadminMaterial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20sp"
+                android:layout_marginHorizontal="5sp"
                 android:layout_weight="1"
                 android:text="Gestión Material" />
 
@@ -117,8 +117,8 @@
                 android:id="@+id/fpBadminHistorico"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20sp"
-                android:layout_weight="1"
+                android:layout_marginHorizontal="5sp"
+                android:layout_weight="2"
                 android:text="Histórico" />
         </LinearLayout>
 
@@ -130,13 +130,11 @@
             android:textSize="24sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/fpTVmaterialReservado"
+        <ListView
+            android:id="@+id/fpLVlistadoReservas"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10sp"
-            android:layout_marginRight="10sp"
-            android:text="TextView" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
+
 </FrameLayout>

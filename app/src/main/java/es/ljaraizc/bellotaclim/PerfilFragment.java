@@ -13,30 +13,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Filter;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -50,6 +48,9 @@ public class PerfilFragment extends Fragment {
     Button fpBadminMaterial, fpBadminHistorico, fpBcerrarSesion;
 
     TextView fpTVmaterialReservado;
+    ListView fpLVlistadoReservas;
+    List<String> listadoReservas = new ArrayList<>();
+    private ArrayAdapter<String> mAdapterListadoReservas;
 
     LinearLayout fpLinearLayout;
 
@@ -120,7 +121,9 @@ public class PerfilFragment extends Fragment {
         fpTelefono = view.findViewById(R.id.fpTelefono);
         fpNacimiento = view.findViewById(R.id.fpNacimiento);
 
-        fpTVmaterialReservado = view.findViewById(R.id.fpTVmaterialReservado);
+        //fpTVmaterialReservado = view.findViewById(R.id.fpTVmaterialReservado);
+
+        fpLVlistadoReservas = view.findViewById(R.id.fpLVlistadoReservas);
 
         fpLinearLayout = view.findViewById(R.id.fpLinearLayout);
 
@@ -191,7 +194,10 @@ public class PerfilFragment extends Fragment {
                         if (task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()){
 
-                                fpTVmaterialReservado.append("Material: " + document.getString("Tipo") + ", marca " + document.getString("Marca") + ", modelo: " + document.getString("Modelo") + "\n");
+                                //fpTVmaterialReservado.append("Material: " + document.getString("Tipo") + ", marca " + document.getString("Marca") + ", modelo: " + document.getString("Modelo") + "\n");
+                                listadoReservas.add("Material: " + document.getString("Tipo") + ", Marca " + document.getString("Marca") + ", Modelo: " + document.getString("Modelo"));
+                                //mAdapterListadoReservas = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,listadoReservas);
+                                //fpLVlistadoReservas.setAdapter(mAdapterListadoReservas);
 
                             }
                         }
@@ -204,7 +210,8 @@ public class PerfilFragment extends Fragment {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        fpTVmaterialReservado.setText("");
+        //fpTVmaterialReservado.setText("");
+        listadoReservas.clear();
 
         //Obtenemos el año, mes y día en el que nos encontramos.
         Calendar calendar = new GregorianCalendar();
@@ -232,8 +239,10 @@ public class PerfilFragment extends Fragment {
                         if (task.isSuccessful()){
                             for (QueryDocumentSnapshot document : task.getResult()){
 
-                                fpTVmaterialReservado.append("Sala " + document.getString("Tipo") + ", día " + document.getString("Dia") + " a las: " + document.getString("Hora") + "\n");
-
+                                //fpTVmaterialReservado.append("Sala " + document.getString("Tipo") + ", día " + document.getString("Dia") + " a las: " + document.getString("Hora") + "\n");
+                                listadoReservas.add("Sala " + document.getString("Tipo") + ", día " + document.getString("Dia") + " a las: " + document.getString("Hora"));
+                                mAdapterListadoReservas = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,listadoReservas);
+                                fpLVlistadoReservas.setAdapter(mAdapterListadoReservas);
                             }
                         }
                     }
