@@ -195,9 +195,9 @@ public class PerfilFragment extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()){
 
                                 //fpTVmaterialReservado.append("Material: " + document.getString("Tipo") + ", marca " + document.getString("Marca") + ", modelo: " + document.getString("Modelo") + "\n");
-                                listadoReservas.add("Material: " + document.getString("Tipo") + ", Marca " + document.getString("Marca") + ", Modelo: " + document.getString("Modelo"));
-                                //mAdapterListadoReservas = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,listadoReservas);
-                                //fpLVlistadoReservas.setAdapter(mAdapterListadoReservas);
+                                listadoReservas.add("Material: " + document.getString("Tipo") + ", Marca " + document.getString("Marca") + ", Modelo " + document.getString("Modelo") + ", Talla " + document.getString("Talla"));
+                                mAdapterListadoReservas = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,listadoReservas);
+                                fpLVlistadoReservas.setAdapter(mAdapterListadoReservas);
 
                             }
                         }

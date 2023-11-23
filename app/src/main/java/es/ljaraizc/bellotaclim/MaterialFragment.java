@@ -161,8 +161,9 @@ public class MaterialFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                realizarReserva(material, email, idEscalador);
-                consultarMaterialDisponible();
+                //realizarReserva(material, email, idEscalador);
+                evitarReservaMismoTipo(material, email, idEscalador, material.getTipo());
+                //consultarMaterialDisponible();
 
             }
         });
@@ -235,6 +236,45 @@ public class MaterialFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    public void evitarReservaMismoTipo(Material m, String email, String id, String tipo){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        db.collection("Material")
+                .whereEqualTo("Id_escalador", id)
+                .whereEqualTo("Tipo", tipo)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()){
+                            boolean reservaMismoTipo = true;
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+
+                                reservaMismoTipo = document.getBoolean("Libre");
+
+                            }
+
+                            if (reservaMismoTipo){
+                                realizarReserva(m, email, id);
+
+                                if (fmStipo.getSelectedItem().toString().equalsIgnoreCase("sin filtro")){
+                                    consultarMaterialDisponible();
+                                }else {
+                                    consultarMaterialDisponiblePorTipo(m.getTipo());
+                                }
+
+                            }else{
+                                Toast.makeText(getContext(), "Ya has reservado un material del tipo: " + tipo, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                    }
+                });
+
     }
 
     public void consultarMaterialDisponiblePorTipo(String tipo){
