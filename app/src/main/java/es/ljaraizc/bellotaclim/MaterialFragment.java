@@ -108,6 +108,7 @@ public class MaterialFragment extends Fragment {
         //Con el Spinner ya no es necesario.
         //consultarMaterialDisponible();
 
+
         fmLVmaterial.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -118,7 +119,7 @@ public class MaterialFragment extends Fragment {
 
                 //Toast.makeText(getActivity(), "Reservas: " + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo(), Toast.LENGTH_SHORT).show();
 
-                fmTVresumenReserva.setText("Reserva seleccionada:\n" + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo());
+                fmTVresumenReserva.setText("Reserva seleccionada:\n" + material.getTipo() + ", " + material.getMarca() + " - " + material.getModelo() + ", talla: " + material.getTalla());
                 //fmTVresumenReserva.append("\n ID: " + material.getIdMaterial());
 
                 fmBreservar.setEnabled(true);
@@ -181,7 +182,11 @@ public class MaterialFragment extends Fragment {
                     @Override
                     public void onSuccess(Void unused) {
                         //Toast.makeText(getActivity(), "¡Reserva realiza!", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getActivity(), "¡Reserva !"+email, Toast.LENGTH_SHORT).show();
+
+                        fmTVresumenReserva.setText("Reserva realizada." +
+                                "\nSelecciona otro para reservar.");
+
+
                     }
                 });
 
@@ -234,8 +239,6 @@ public class MaterialFragment extends Fragment {
 
     public void consultarMaterialDisponiblePorTipo(String tipo){
 
-        listaMaterial.clear();
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         db.collection("Material")
@@ -246,6 +249,9 @@ public class MaterialFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+
+                            listaMaterial.clear();
+
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 //Log.d("TAG", document.getId() + " => " + document.getData());
 

@@ -70,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
         helloWorld = findViewById(R.id.A1_tv_texto);
 
+        //crearPiesdeGato();
+
         A1_b_iniciar = findViewById(R.id.A1_b_iniciar);
 
         A1_b_iniciar.setOnClickListener(new View.OnClickListener() {
@@ -120,27 +122,6 @@ public class MainActivity extends AppCompatActivity {
         return camposValidos;
     }
 
-    public Task<QuerySnapshot> queryCollection(String collectionPath) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference collectionRef = db.collection(collectionPath);
-
-        // Crea un TaskCompletionSource para controlar la promesa
-        final TaskCompletionSource<QuerySnapshot> taskCompletionSource = new TaskCompletionSource<>();
-
-        // Realiza la consulta
-        collectionRef.get()
-                .addOnSuccessListener(querySnapshot -> {
-                    // La consulta fue exitosa, completa la promesa con el resultado
-                    taskCompletionSource.setResult(querySnapshot);
-                })
-                .addOnFailureListener(e -> {
-                    // La consulta falló, completa la promesa con un error
-                    taskCompletionSource.setException(e);
-                });
-
-        // Retorna la promesa
-        return taskCompletionSource.getTask();
-    }
     public void consultaSimple(){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -204,42 +185,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void borrar(){
-        ConexionBDD cBDD = new ConexionBDD();
-        String nombre ="";
-
-        try {
-
-            conn = cBDD.conclass();
-
-            if(conn!=null){
-
-                String query ="SELECT * FROM usuario  WHERE id_usuario = 1";
-                Statement st = conn.createStatement();
-                ResultSet rs = st.executeQuery(query);
-
-                while (rs.next()){
-                    nombre = rs.getString(2);
-                }
-
-                if (nombre!=null){
-                    Toast.makeText(MainActivity.this, "Bienvenido " + nombre, Toast.LENGTH_SHORT).show();
-                    //abrirActividadDatosUsuario(email);
-                    //abrirActividadReservar(email);
-
-                }else {
-                    Toast.makeText(MainActivity.this, "Usuario y contraseña erróneos.", Toast.LENGTH_SHORT).show();
-                }
-
-                A1_tv_texto.setText(""+nombre);
-            }
-
-        }catch (Exception e){
-            Log.e("Error: ", e.getMessage());
-        }
-
-    }
-
     public void abrirActividadMenuPrincipal(String id){
         Intent intent = new Intent(this, MenuPrincipalActivity.class);
         intent.putExtra("id", id);
@@ -253,5 +198,39 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CrearCuentaActivity.class);
         startActivity(intent);
     }
+
+    public void crearPiesdeGato(){
+
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        Map<String, Object> piesDeGato = new HashMap<>();
+        piesDeGato.put("Email", "");
+        piesDeGato.put("Id_escalador", "");
+        piesDeGato.put("Libre", true);
+        piesDeGato.put("Marca", "Scarpa");
+        piesDeGato.put("Modelo", "Drago");
+        piesDeGato.put("Nombre", "");
+        piesDeGato.put("Talla", "38");
+        piesDeGato.put("Telefono", "");
+        piesDeGato.put("Tipo", "Pies de Gato");
+
+// Add a new document with a generated ID
+        db.collection("Material")
+                .add(piesDeGato)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        //Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        //Log.w(TAG, "Error adding document", e);
+                    }
+                });
+
+    }
+
 
 }
