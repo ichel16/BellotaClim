@@ -227,6 +227,7 @@ public class AdminMaterialActivity extends AppCompatActivity {
         materialHistorico.put("Id_material", m.getIdMaterial());
         materialHistorico.put("Email", m.getEmailEscalador());
         materialHistorico.put("Dia", fecha);
+        materialHistorico.put("Tipo", m.getTipo());
 
         db.collection("MaterialHistorico")
                 .add(materialHistorico)

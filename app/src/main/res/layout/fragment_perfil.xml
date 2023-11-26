@@ -54,7 +54,6 @@
             android:layout_marginTop="5sp"
             android:layout_marginRight="15sp"
             android:layout_marginBottom="5sp"
-            android:editable="false"
             android:ems="10"
             android:inputType="text"
             android:text="null" />

@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         helloWorld = findViewById(R.id.A1_tv_texto);
 
-        //crearPiesdeGato();
+        //crearMaterial();
 
         A1_b_iniciar = findViewById(R.id.A1_b_iniciar);
 
@@ -199,11 +199,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void crearPiesdeGato(){
+    public void crearMaterial(){
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        Map<String, Object> piesDeGato = new HashMap<>();
+        /*Map<String, Object> piesDeGato = new HashMap<>();
         piesDeGato.put("Email", "");
         piesDeGato.put("Id_escalador", "");
         piesDeGato.put("Libre", true);
@@ -212,11 +212,46 @@ public class MainActivity extends AppCompatActivity {
         piesDeGato.put("Nombre", "");
         piesDeGato.put("Talla", "38");
         piesDeGato.put("Telefono", "");
-        piesDeGato.put("Tipo", "Pies de Gato");
+        piesDeGato.put("Tipo", "Pies de Gato");*/
+
+        /*Map<String, Object> arnes = new HashMap<>();
+        arnes.put("Email", "");
+        arnes.put("Id_escalador", "");
+        arnes.put("Libre", true);
+        arnes.put("Marca", "Singing Rock");
+        arnes.put("Modelo", "Top");
+        arnes.put("Nombre", "");
+        arnes.put("Talla", "M");
+        arnes.put("Telefono", "");
+        arnes.put("Tipo", "Arnés");*/
+
+        /*Map<String, Object> cuerda = new HashMap<>();
+        cuerda.put("Email", "");
+        cuerda.put("Id_escalador", "");
+        cuerda.put("Libre", true);
+        cuerda.put("Marca", "Korda's");
+        cuerda.put("Modelo", "Kloe");
+        cuerda.put("Nombre", "");
+        cuerda.put("Talla", "40m");
+        cuerda.put("Telefono", "");
+        cuerda.put("Tipo", "Cuerda");*/
+
+        Map<String, Object> casco = new HashMap<>();
+        casco.put("Email", "");
+        casco.put("Id_escalador", "");
+        casco.put("Libre", true);
+        casco.put("Marca", "Kong");
+        casco.put("Modelo", "Verde");
+        casco.put("Nombre", "");
+        casco.put("Talla", "L");
+        casco.put("Telefono", "");
+        casco.put("Tipo", "Casco");
+
+
 
 // Add a new document with a generated ID
         db.collection("Material")
-                .add(piesDeGato)
+                .add(casco)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {

@@ -144,6 +144,13 @@ public class PerfilFragment extends Fragment {
 
         fpBadminHistorico = view.findViewById(R.id.fpBadminHistorico);
 
+        fpBadminHistorico.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirActividadHistorico(id);
+            }
+        });
+
         fpBcerrarSesion = view.findViewById(R.id.fpBcerrarSesion);
 
         fpBcerrarSesion.setOnClickListener(new View.OnClickListener() {
@@ -260,11 +267,11 @@ public class PerfilFragment extends Fragment {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        fpNombre.setText(document.getString("nombre"));
-                        fpApellidos.setText(document.getString("apellido"));
-                        fpEmail.setText(document.getString("email"));
-                        fpTelefono.setText(document.getString("telefono"));
-                        fpNacimiento.setText(document.getString("año nacimiento"));
+                        fpNombre.setText("Nombre: " + document.getString("nombre"));
+                        fpApellidos.setText("Apellidos: " + document.getString("apellido"));
+                        fpEmail.setText("Email: " + document.getString("email"));
+                        fpTelefono.setText("Tlf: " + document.getString("telefono"));
+                        fpNacimiento.setText("Año de nacimiento: " + document.getString("año nacimiento"));
 
                         if (document.getString("rol").equalsIgnoreCase("admin")) fpLinearLayout.setVisibility(View.VISIBLE);
 
@@ -286,4 +293,12 @@ public class PerfilFragment extends Fragment {
         intent.putExtra("email", fpEmail.getText().toString());
         startActivity(intent);
     }
+
+    public void abrirActividadHistorico(String id){
+        Intent intent = new Intent(getActivity(), HistoricoActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("email", fpEmail.getText().toString());
+        startActivity(intent);
+    }
+
 }
