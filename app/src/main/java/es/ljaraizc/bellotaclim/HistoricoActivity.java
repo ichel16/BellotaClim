@@ -83,15 +83,15 @@ public class HistoricoActivity extends AppCompatActivity {
 
     public List<String> crearMeses(){
         List<String> meses = new ArrayList<>();
-        meses.add("01");
-        meses.add("02");
-        meses.add("03");
-        meses.add("04");
-        meses.add("05");
-        meses.add("06");
-        meses.add("07");
-        meses.add("08");
-        meses.add("09");
+        meses.add("1");
+        meses.add("2");
+        meses.add("3");
+        meses.add("4");
+        meses.add("5");
+        meses.add("6");
+        meses.add("7");
+        meses.add("8");
+        meses.add("9");
         meses.add("10");
         meses.add("11");
         meses.add("12");
@@ -180,9 +180,11 @@ public class HistoricoActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 tipo = document.getString("Tipo");
-
                                 fecha = document.getString("Dia");
-                                fecha = fecha.substring(0, fecha.length()-3);
+
+                                if (fecha.length() == 9){fecha = fecha.substring(0, fecha.length()-2);}
+                                if (fecha.length() == 10) {fecha = fecha.substring(0, fecha.length()-3);}
+
                                 if (fecha.equalsIgnoreCase(year+"-"+mes)){
 
                                     switch (tipo) {
@@ -276,7 +278,9 @@ public class HistoricoActivity extends AppCompatActivity {
                                 tipo = document.getString("Tipo");
                                 fecha = document.getString("Dia");
 
-                                fecha = fecha.substring(0, fecha.length()-3);
+                                if (fecha.length() == 9){fecha = fecha.substring(0, fecha.length()-2);}
+                                if (fecha.length() == 10) {fecha = fecha.substring(0, fecha.length()-3);}
+
                                 if (fecha.equalsIgnoreCase(year+"-"+mes)){
 
                                     switch (tipo) {

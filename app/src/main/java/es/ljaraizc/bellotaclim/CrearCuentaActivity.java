@@ -172,9 +172,9 @@ public class CrearCuentaActivity extends AppCompatActivity {
         dialogo.setMessage("Por seguridad, necesitamos que introduzcas tu número de socio.");
         dialogo.setCancelable(false);
 
-        // Set up the input
+        // creamos la entrada de texto.
         final EditText input = new EditText(this);
-        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        // Expecificamos el tipo de entrada que esperamos recibir.
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         dialogo.setView(input);
 
@@ -210,10 +210,7 @@ public class CrearCuentaActivity extends AppCompatActivity {
                             a1bAceptar.setEnabled(false);
                         }else {
                             a1ETemail.setText(document.getString("Email"));
-
                         }
-
-
                         Log.d("TAG", "DocumentSnapshot data: " + document.getData());
                     } else {
                         Log.d("TAG", "No such document");

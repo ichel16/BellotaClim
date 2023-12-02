@@ -157,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("TAG", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-
                             String id = user.getUid();
                             abrirActividadMenuPrincipal(id);
 
