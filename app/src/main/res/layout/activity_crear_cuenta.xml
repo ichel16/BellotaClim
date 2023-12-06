@@ -91,17 +91,18 @@
         android:inputType="text"
         android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/a1ETtelefono"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="25sp"
-        android:layout_marginTop="5sp"
-        android:layout_marginRight="25sp"
-        android:ems="10"
-        android:hint="Teléfono"
-        android:inputType="phone"
-        android:textSize="20sp" />
+        <EditText
+            android:id="@+id/a1ETtelefono"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25sp"
+            android:layout_marginTop="5sp"
+            android:layout_marginRight="25sp"
+            android:ems="10"
+            android:hint="Teléfono"
+            android:inputType="phone"
+            android:maxLength="9"
+            android:textSize="20sp" />
 
         <EditText
             android:id="@+id/a1ETedad"
@@ -113,6 +114,7 @@
             android:ems="10"
             android:hint="Año de nacimiento"
             android:inputType="number"
+            android:maxLength="4"
             android:textSize="20sp" />
 
     <EditText

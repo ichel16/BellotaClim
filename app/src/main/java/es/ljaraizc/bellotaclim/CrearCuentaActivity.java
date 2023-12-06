@@ -105,11 +105,32 @@ public class CrearCuentaActivity extends AppCompatActivity {
         if (telefono.isEmpty()) {
             camposValidos = false;
             a1ETtelefono.setError("Este campo no puede estar vacío.");
+        }else {
+            try {
+            long movil = Long.parseLong(telefono.toString());
+            if (movil < 600000000 | movil > 760000000){
+                a1ETtelefono.setError("Móvil no válido.");
+                camposValidos = false;
+            }
+            }catch (Exception e){}
+
         }
 
         if (edad.isEmpty()) {
             camposValidos = false;
             a1ETedad.setError("Este campo no puede estar vacío.");
+        }else{
+
+            try {
+                int year = Integer.parseInt(edad.toString());
+
+                if (year < 1903 | year > 2012){
+                    a1ETedad.setError("Introduce una fecha entre 1903 y 2012.");
+                    camposValidos = false;
+                }
+
+            }catch (Exception e){}
+
         }
 
         if (pass.isEmpty()) {

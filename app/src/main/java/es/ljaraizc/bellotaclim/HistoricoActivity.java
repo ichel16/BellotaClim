@@ -83,15 +83,15 @@ public class HistoricoActivity extends AppCompatActivity {
 
     public List<String> crearMeses(){
         List<String> meses = new ArrayList<>();
-        meses.add("1");
-        meses.add("2");
-        meses.add("3");
-        meses.add("4");
-        meses.add("5");
-        meses.add("6");
-        meses.add("7");
-        meses.add("8");
-        meses.add("9");
+        meses.add("01");
+        meses.add("02");
+        meses.add("03");
+        meses.add("04");
+        meses.add("05");
+        meses.add("06");
+        meses.add("07");
+        meses.add("08");
+        meses.add("09");
         meses.add("10");
         meses.add("11");
         meses.add("12");
@@ -215,31 +215,31 @@ public class HistoricoActivity extends AppCompatActivity {
     public String obtenerMes(String mes){
 
         switch (mes) {
-            case "1":
+            case "01":
                 mes = "Enero";
                 break;
-            case "2":
+            case "02":
                 mes = "Febrero";
                 break;
-            case "3":
+            case "03":
                 mes = "Marzo";
                 break;
-            case "4":
+            case "04":
                 mes = "Abril";
                 break;
-            case "5":
+            case "05":
                 mes = "Mayo";
                 break;
-            case "6":
+            case "06":
                 mes = "Junio";
                 break;
-            case "7":
+            case "07":
                 mes = "Julio";
                 break;
-            case "8":
+            case "08":
                 mes = "Agosto";
                 break;
-            case "9":
+            case "09":
                 mes = "Septiembre";
                 break;
             case "10":
