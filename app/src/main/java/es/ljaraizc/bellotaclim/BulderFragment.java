@@ -182,6 +182,7 @@ public class BulderFragment extends Fragment {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                        Toast.makeText(getContext(), "¡Reserva realizada!", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -195,7 +196,7 @@ public class BulderFragment extends Fragment {
 
     public void consultarAforo(View view){
 
-        listaHorasOcupadas.clear();
+        //listaHorasOcupadas.clear();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -207,6 +208,7 @@ public class BulderFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
+                            listaHorasOcupadas.clear();
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 listaHorasOcupadas.add(document.getString("Hora"));
                                 //listaHorasOcupadas.add(document.getData().toString());

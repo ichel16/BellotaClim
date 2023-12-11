@@ -190,7 +190,7 @@ public class CuerdaFragment extends Fragment {
 
     public void consultarAforo(View view){
 
-        listaHorasOcupadas.clear();
+        //listaHorasOcupadas.clear();
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -202,6 +202,7 @@ public class CuerdaFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()){
+                            listaHorasOcupadas.clear();
                             for (QueryDocumentSnapshot document : task.getResult()){
                                 listaHorasOcupadas.add(document.getString("Hora"));
                                 //listaHorasOcupadas.add(document.getData().toString());
